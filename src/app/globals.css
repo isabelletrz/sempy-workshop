@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 66%;
+    --accent: 0 0% 95%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 17%;
+    --input: 0 0% 17%;
+    --ring: 0 0% 95%;
+    --radius: 0.375rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Site text is flat (no metal). Template artwork keeps .metal-text below. */
+  .chrome-text {
+    color: hsl(var(--foreground));
+  }
+
+  .metal-text {
+    background-image: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f2f2fa 22%,
+      #b9b9c9 42%,
+      #6f6f80 50%,
+      #f8f8ff 58%,
+      #a7a7b8 72%,
+      #e8e8f2 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .chrome-surface {
+    background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.03) 32%,
+      rgba(0, 0, 0, 0.35) 68%,
+      rgba(255, 255, 255, 0.09) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.65),
+      0 24px 80px rgba(0, 0, 0, 0.55);
+  }
+
+  .chrome-edge {
+    position: relative;
+  }
+
+  .chrome-edge::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      rgba(255, 255, 255, 0.75),
+      rgba(255, 255, 255, 0.05) 35%,
+      rgba(255, 255, 255, 0.45) 55%,
+      rgba(255, 255, 255, 0.02) 75%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Liquid chrome backdrop: top of every page only, fading into the page background. */
+  .liquid-chrome-top {
+    background-image: url("/backgrounds/liquid-chrome.jpg");
+    background-size: cover;
+    background-position: center top;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 38%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 38%, transparent 100%);
+  }
+
+  /* Site wallpaper: damask pattern + faint architectural grid, fixed behind everything. */
+  .wallpaper-damask {
+    background-image: url("/backgrounds/damask.svg");
+    background-size: 440px 560px;
+    background-position: center top;
+    opacity: 0.26;
+  }
+
+  .wallpaper-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.10) 1px, transparent 1px);
+    background-size: 390px 480px;
+    background-position: calc(50% + 195px) 0;
+    opacity: 0.85;
+  }
+
+  .wallpaper-vignette {
+    background-image: radial-gradient(ellipse 90% 70% at 50% 35%, rgba(7, 7, 7, 0) 0%, rgba(7, 7, 7, 0.55) 70%, rgba(7, 7, 7, 0.9) 100%);
+  }
+
+  .chrome-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 34px 34px;
+  }
+
+  .chrome-line {
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.65),
+      transparent
+    );
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-chrome-sweep {
+    animation: chrome-sweep 7s linear infinite;
+  }
+}
+
+@keyframes chrome-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  100% {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
