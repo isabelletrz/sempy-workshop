@@ -10,18 +10,27 @@ import { DISCOUNT_STORAGE_KEY, WELCOME_CODE, WELCOME_PERCENT } from "@/lib/disco
 
 const SEEN_KEY = "sempy-popup-seen"
 
-function read(key: string) {
+/** Dismissed/subscribed in this browser session? Survives reloads, not a new visit. */
+function hasSeenPopup() {
   try {
-    return localStorage.getItem(key)
+    return sessionStorage.getItem(SEEN_KEY) !== null
   } catch {
-    return null
+    return false
   }
 }
-function write(key: string, value: string) {
+function markPopupSeen() {
   try {
-    localStorage.setItem(key, value)
+    sessionStorage.setItem(SEEN_KEY, "1")
   } catch {
-    /* storage unavailable: popup may show again next visit */
+    /* storage unavailable: popup may show again on the next page load */
+  }
+}
+/** The code itself is kept in localStorage so it survives closing the browser. */
+function rememberCode() {
+  try {
+    localStorage.setItem(DISCOUNT_STORAGE_KEY, WELCOME_CODE)
+  } catch {
+    /* storage unavailable: discount is still applied in memory */
   }
 }
 
@@ -36,13 +45,13 @@ export function DiscountPopup() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    if (hidden || read(SEEN_KEY)) return
+    if (hidden || hasSeenPopup()) return
     const id = window.setTimeout(() => setOpen(true), 1200)
     return () => window.clearTimeout(id)
   }, [hidden])
 
   const close = () => {
-    write(SEEN_KEY, "1")
+    markPopupSeen()
     setOpen(false)
   }
 
@@ -66,8 +75,8 @@ export function DiscountPopup() {
       })
       const data = (await response.json()) as { ok?: boolean; error?: string }
       if (!response.ok || !data.ok) throw new Error(data.error || "Something went wrong. Please try again.")
-      write(DISCOUNT_STORAGE_KEY, WELCOME_CODE)
-      write(SEEN_KEY, "1")
+      rememberCode()
+      markPopupSeen()
       setDone(true)
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong. Please try again.")
